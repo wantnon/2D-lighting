@@ -117,15 +117,15 @@ bool HelloWorld::init()
         initValueVarList.push_back(&m_initValue2);
         initValueVarList.push_back(&m_initValue3);
         vector<string> titleList;
-        titleList.push_back("R ");
-        titleList.push_back("G ");
-        titleList.push_back("B ");
+        titleList.push_back("R  ");
+        titleList.push_back("G  ");
+        titleList.push_back("B  ");
         vector<SEL_CCControlHandler> pSelectorList;
         pSelectorList.push_back(cccontrol_selector(HelloWorld::sliderAction1));
         pSelectorList.push_back(cccontrol_selector(HelloWorld::sliderAction2));
         pSelectorList.push_back(cccontrol_selector(HelloWorld::sliderAction3));
         //title
-        CCLabelTTF* pLabel = CCLabelTTF::create("light diffuse ", "Arial", 30);
+        CCLabelTTF* pLabel = CCLabelTTF::create("light diffuse  ", "Arial", 30);
         pLabel->setAnchorPoint(ccp(0,0.5));
         uiNode_lighting->addChild(pLabel, 1);
         for(int i=0;i<(int)ppSliderList.size();i++){
@@ -140,7 +140,7 @@ bool HelloWorld::init()
             *ppSliderList[i]=slider;
             //title
             CCLabelTTF* pLabel = CCLabelTTF::create(titleList[i].c_str(), "Arial", 30);
-            pLabel->setPosition(slider->getPosition()+ccp(-pLabel->getContentSize().width/2,slider->getContentSize().height/2));
+            pLabel->setPosition(ccp(-pLabel->getContentSize().width/2,slider->getContentSize().height/2));
             slider->addChild(pLabel, 1);
         }
         //positions
@@ -168,15 +168,15 @@ bool HelloWorld::init()
         initValueVarList.push_back(&m_initValue2a);
         initValueVarList.push_back(&m_initValue3a);
         vector<string> titleList;
-        titleList.push_back("R ");
-        titleList.push_back("G ");
-        titleList.push_back("B ");
+        titleList.push_back("R  ");
+        titleList.push_back("G  ");
+        titleList.push_back("B  ");
         vector<SEL_CCControlHandler> pSelectorList;
         pSelectorList.push_back(cccontrol_selector(HelloWorld::sliderAction1a));
         pSelectorList.push_back(cccontrol_selector(HelloWorld::sliderAction2a));
         pSelectorList.push_back(cccontrol_selector(HelloWorld::sliderAction3a));
         //title
-        CCLabelTTF* pLabel = CCLabelTTF::create("light ambient ", "Arial", 30);
+        CCLabelTTF* pLabel = CCLabelTTF::create("light ambient  ", "Arial", 30);
         pLabel->setAnchorPoint(ccp(0,0.5));
         uiNode_lighting->addChild(pLabel, 1);
         for(int i=0;i<(int)ppSliderList.size();i++){
@@ -191,7 +191,7 @@ bool HelloWorld::init()
             *ppSliderList[i]=slider;
             //title
             CCLabelTTF* pLabel = CCLabelTTF::create(titleList[i].c_str(), "Arial", 30);
-            pLabel->setPosition(slider->getPosition()+ccp(-pLabel->getContentSize().width/2,slider->getContentSize().height/2));
+            pLabel->setPosition(ccp(-pLabel->getContentSize().width/2,slider->getContentSize().height/2));
             slider->addChild(pLabel, 1);
         }
         //positions
@@ -204,6 +204,29 @@ bool HelloWorld::init()
         (*ppSliderList[2])->setPosition((*ppSliderList[1])->getPosition()+ccp(0,-sliderSize.height));
         
     }
+    //----rotation
+    //slider
+	{
+        CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
+        //title
+        CCLabelTTF* pLabel = CCLabelTTF::create("rotation  ", "Arial", 30);
+        uiNode_lighting->addChild(pLabel, 1);
+		//
+		CCControlSlider *slider = CCControlSlider::create("sliderTrack.png","sliderProgress.png" ,"sliderThumb.png");
+		slider->setAnchorPoint(ccp(0.5f, 0.5f));
+		slider->setMinimumValue(0.0f); // Sets the min value of range
+		slider->setMaximumValue(360.0f); // Sets the max value of range
+        m_initValue=pSceneNode->getRotation();
+		slider->setValue(m_initValue);
+		slider->addTargetWithActionForControlEvents(this, cccontrol_selector(HelloWorld::sliderAction), CCControlEventValueChanged);
+		m_pSliderCtl=slider;
+		uiNode_lighting->addChild(m_pSliderCtl,100);
+		//
+        pLabel->setPosition(ccp(screenSize.width / 4*3, screenSize.height / 2.0f));
+        slider->setPosition(pLabel->getPosition()+ccp(0,-pLabel->getContentSize().height/2-slider->getContentSize().height/2));
+        
+	}
+
 
 
 	
@@ -339,6 +362,15 @@ void HelloWorld::menu1Callback(CCObject* pSender){
     uiNode_lighting->setVisible(true);
     uiNode_lighting->setPosition(ccp(0,0));
     light2D->setVisible(true);
+    
+}
+
+void HelloWorld::sliderAction(CCObject* sender, CCControlEvent controlEvent)
+{
+    CCControlSlider* pSlider = (CCControlSlider*)sender;
+    float value=pSlider->getValue();
+    pSceneNode->setRotation(value);
+    
     
 }
 

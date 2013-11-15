@@ -85,8 +85,17 @@ void SceneNode::draw()
         //see:http://user.qzone.qq.com/350479720/blog/1384482833
         CCPoint texLeftUpPosInWorld=this->convertToWorldSpace(ccp(0,this->getContentSize().height));
         CCPoint texLeftUpPosToLightPos=lightPosInWorld-texLeftUpPosInWorld;
-        light2DInTexSpace=CCPoint(texLeftUpPosToLightPos.x/this->getContentSize().width,
-                                  texLeftUpPosToLightPos.y/this->getContentSize().height);
+        float A=-this->getRotation();//in cocos2d-x, rot angle A equivalent to rot -A in math coordinate
+        float sinA=sinf(A*M_PI/180);
+        float cosA=cosf(A*M_PI/180);
+        float sinAplus90=cosA;
+        float cosAplus90=-sinA;
+        CCPoint Xdir=CCPoint(cosA,sinA);
+        CCPoint Ydir=CCPoint(cosAplus90,sinAplus90);
+        float x=ccpDot(texLeftUpPosToLightPos, Xdir);
+        float y=ccpDot(texLeftUpPosToLightPos, Ydir);
+        light2DInTexSpace=CCPoint(x/this->getContentSize().width,
+                                  y/this->getContentSize().height);
         light2DInTexSpace.y=-light2DInTexSpace.y;
         
     }//get lightPosInTexSpace

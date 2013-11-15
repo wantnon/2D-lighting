@@ -33,6 +33,9 @@ public:
     cocos2d::extension::CCControlButton* m_controlButton;
     void resetSliders(CCObject *senderz, cocos2d::extension::CCControlEvent controlEvent);
 public:
+    CCControlSlider* m_pSliderCtl;
+    void sliderAction(CCObject* sender, CCControlEvent controlEvent);
+    float m_initValue;
     //slider1
     CCControlSlider* m_pSliderCtl1;
     void sliderAction1(CCObject* sender, CCControlEvent controlEvent);
