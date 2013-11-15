@@ -80,13 +80,15 @@ void SceneNode::draw()
     CCPoint light2DInTexSpace; //light2D position in texture space
     {
         //tansform light2DPos to texture space
-        CCPoint thisPos=this->convertToWorldSpaceAR(ccp(0,0));
-        CCPoint lightPos=light2DPos;
-        CCPoint texLeftUpPos=CCPoint(thisPos.x-this->getContentSize().width/2,thisPos.y+this->getContentSize().height/2);
-        CCPoint texLeftUpPosToLightPos=lightPos-texLeftUpPos;
+        CCPoint lightPosInWorld=light2DPos;
+        //in sprite's local space, origin always at the left down corner, no matter what the anchorPoint is.
+        //see:http://user.qzone.qq.com/350479720/blog/1384482833
+        CCPoint texLeftUpPosInWorld=this->convertToWorldSpace(ccp(0,this->getContentSize().height));
+        CCPoint texLeftUpPosToLightPos=lightPosInWorld-texLeftUpPosInWorld;
         light2DInTexSpace=CCPoint(texLeftUpPosToLightPos.x/this->getContentSize().width,
-                                           texLeftUpPosToLightPos.y/this->getContentSize().height);
+                                  texLeftUpPosToLightPos.y/this->getContentSize().height);
         light2DInTexSpace.y=-light2DInTexSpace.y;
+        
     }//get lightPosInTexSpace
     float light2DInTexSpace_c[2]={light2DInTexSpace.x,light2DInTexSpace.y};
     glUniform2fv(program_renderRipple.myUnifoMap["light2DInTexSpace"],1,light2DInTexSpace_c);
